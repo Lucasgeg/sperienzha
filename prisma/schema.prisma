@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,64 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model log {
+  id_log  Int       @id @default(autoincrement())
+  id_user Int?
+  action  String?   @db.VarChar
+  date    DateTime? @db.Timestamp(6)
+  user    user?     @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model match {
+  id_match      Int   @id @default(autoincrement())
+  id_user       Int?
+  id_user_autre Int?
+  user          user? @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model msg {
+  id_msg      Int       @id @default(autoincrement())
+  id_user     Int?
+  message     String?   @db.VarChar(500)
+  date_envoie DateTime? @db.Date
+  id_user_r   Int?
+  user        user?     @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sanction {
+  id_sanction Int     @id @default(autoincrement())
+  id_user     Int?
+  raison      String? @db.VarChar(500)
+  user        user?   @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model user {
+  id_user            Int                  @id @default(autoincrement())
+  nom                String?              @db.VarChar(30)
+  prenom             String?              @db.VarChar(30)
+  age                Int?
+  photo              String?              @db.VarChar
+  description        String?              @db.VarChar(1500)
+  ecole              String?              @db.VarChar(30)
+  niveau_scolaire    Int?
+  genre              String?              @db.VarChar
+  personne_lie       Int?
+  email              String               @unique @db.VarChar
+  clerk_id           String               @unique @db.VarChar
+  first_connection   Boolean?             @default(true)
+  log                log[]
+  match              match[]
+  msg                msg[]
+  sanction           sanction[]
+  user_match_critere user_match_critere[]
+}
+
+model user_match_critere {
+  id_match_critere Int     @id @default(autoincrement())
+  id_user          Int?
+  critere_de_match String? @db.VarChar
+  filtre_de_match  String? @db.VarChar
+  user             user?   @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
 }
