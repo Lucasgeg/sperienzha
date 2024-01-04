@@ -1,4 +1,4 @@
-import { SignIn, auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 import prisma from "@/lib/prisma";
 import { WelcomeForm } from "../component/WelcomeForm/WelcomeForm";
 
@@ -17,7 +17,7 @@ export default async function Welcome() {
         Maintenant que tu es inscrit, merci de compléter ces quelques
         informations afin que nous puissons t&apos;aider à trouver ton tuteur
       </p>
-      <WelcomeForm email={user?.email} />
+      {user?.email && <WelcomeForm email={user.email} />}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
   publicRoutes: ["/api/webhook(.*)"],
+
   afterAuth: async (auth, req) => {
     const userId = auth.userId;
     const url = req.nextUrl.clone();
@@ -20,9 +21,14 @@ export default authMiddleware({
       },
       body: JSON.stringify({ id: userId }),
     });
+
     const result = await res.json();
-    if (result.first_connection === false) return;
+    if (result.first_connection === false) {
+      return NextResponse.next();
+    }
     if (result.first_connection === true) {
+      if (url.pathname === "/api/firstConection/updatewelcome")
+        return NextResponse.next();
       url.pathname = "/welcome";
       return NextResponse.rewrite(url);
     }

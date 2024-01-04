@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Input } from "../Input/Input";
 import Image from "next/image";
+import prisma from "@/lib/prisma";
+import { useRouter } from "next/navigation";
 
 type UserWelcomeProps = {
-  email?: string;
+  email: string;
 };
 export enum School {
   LIT = "Learn IT",
@@ -27,7 +29,7 @@ export enum Gender {
   O = "Autre",
 }
 
-interface WelcomeForm {
+export interface WelcomeForm {
   firstname?: string;
   lastname?: string;
   email?: string;
@@ -39,14 +41,11 @@ interface WelcomeForm {
   picture?: string;
 }
 
-interface FileUploadEvent extends React.ChangeEvent<HTMLInputElement> {
-  target: HTMLInputElement & {
-    files: FileList;
-  };
-}
-
 export const WelcomeForm = ({ email }: UserWelcomeProps) => {
-  const [welcomeForm, setWelcomeForm] = useState<WelcomeForm>({});
+  const router = useRouter();
+  const [welcomeForm, setWelcomeForm] = useState<WelcomeForm>({
+    email: email,
+  });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWelcomeForm({ ...welcomeForm, [e.target.id]: e.target.value });
   };
@@ -62,23 +61,119 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(welcomeForm);
+  const handleSelectGenderChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setWelcomeForm({
+      ...welcomeForm,
+      gender: e.target.value as Gender,
+    });
   };
+
+  const handleSelectSchoolChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setWelcomeForm({
+      ...welcomeForm,
+      school: e.target.value as School,
+    });
+  };
+  const handleSelectSchoolLvlChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setWelcomeForm({
+      ...welcomeForm,
+      level: e.target.value as SchoolLevel,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("toto");
+
+    if (
+      !welcomeForm.firstname ||
+      !welcomeForm.lastname ||
+      !welcomeForm.email ||
+      !welcomeForm.gender ||
+      !welcomeForm.age ||
+      !welcomeForm.school ||
+      !welcomeForm.level ||
+      !welcomeForm.description ||
+      !welcomeForm.picture
+    ) {
+      return;
+    }
+    console.log("tata");
+    console.log(welcomeForm.email);
+
+    const res = await fetch(
+      "http://localhost:3000/api/firstConection/updatewelcome",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(welcomeForm),
+      }
+    );
+    if (res) {
+      console.log("tutu");
+      console.log(res);
+    }
+
+    if (res.status === 200) {
+      const result = await res.json();
+      console.log(result);
+
+      router.push("/");
+    }
+    console.log("titi");
+  };
+  /*   const handleTest = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { email } = welcomeForm;
+    const res = await fetch("http://localhost:3000/api/toto", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+    console.log("tata");
+    console.log(await res.json());
+  }; */
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 place-items-center">
-        <Input title="Prénom" id="firstname" className="w-1/2 text-left" />
-        <Input title="Nom" id="lastname" className="w-1/2 text-left" />
+        <Input
+          title="Prénom"
+          id="firstname"
+          className="w-1/2 text-left"
+          value={welcomeForm.firstname}
+          onChange={(e) => handleChange(e)}
+        />
+        <Input
+          title="Nom"
+          id="lastname"
+          value={welcomeForm.lastname}
+          onChange={(e) => handleChange(e)}
+          className="w-1/2 text-left"
+        />
         <Input
           title="Email"
           id="email"
-          value={email || ""}
+          value={email || welcomeForm.email}
           disabled={Boolean(email)}
+          onChange={(e) => handleChange(e)}
           className="text-left w-1/2"
         />
-        <Input title="Age" id="age" className="text-left w-1/2" />
+        <Input
+          title="Age"
+          id="age"
+          className="text-left w-1/2"
+          onChange={(e) => handleChange(e)}
+        />
         <div className="w-1/2">
           <label
             htmlFor="gender"
@@ -91,6 +186,8 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
             name="gender"
             id="gender"
             className="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+            value={welcomeForm.gender}
+            onChange={(e) => handleSelectGenderChange(e)}
           >
             <option value="">Please select</option>
             {Object.values(Gender).map((gender) => (
@@ -112,6 +209,8 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
             name="school"
             id="school"
             className="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+            value={welcomeForm.school}
+            onChange={(e) => handleSelectSchoolChange(e)}
           >
             <option value="">Please select</option>
             {Object.values(School).map((school) => (
@@ -133,6 +232,8 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
             name="level"
             id="level"
             className="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+            value={welcomeForm.level}
+            onChange={(e) => handleSelectSchoolLvlChange(e)}
           >
             <option value="">Please select</option>
             {Object.values(SchoolLevel).map((SchoolLevel) => (
@@ -154,12 +255,19 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
               rows={4}
               placeholder="Décris toi en quelques mots"
               maxLength={1500}
+              onChange={(e) =>
+                setWelcomeForm({ ...welcomeForm, description: e.target.value })
+              }
             ></textarea>
 
             <div className="flex items-center justify-end gap-2 bg-white p-3">
               <button
                 type="button"
                 className="rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-600"
+                onClick={() =>
+                  setWelcomeForm({ ...welcomeForm, description: "" })
+                }
+                value={welcomeForm.description}
               >
                 Clear
               </button>
@@ -175,14 +283,6 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
           className="text-left w-1/2"
           onChange={(e) => handlePicture(e)}
         />
-        {welcomeForm.picture && (
-          <Image
-            src={welcomeForm.picture}
-            alt="uploaded"
-            width={200}
-            height={200}
-          />
-        )}
       </div>
       <button
         type="submit"

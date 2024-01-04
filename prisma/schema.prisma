@@ -46,7 +46,7 @@ model user {
   photo              String?              @db.VarChar
   description        String?              @db.VarChar(1500)
   ecole              String?              @db.VarChar(30)
-  niveau_scolaire    Int?
+  niveau_scolaire    String?              @db.VarChar(30)
   genre              String?              @db.VarChar
   personne_lie       Int?
   email              String               @unique @db.VarChar
