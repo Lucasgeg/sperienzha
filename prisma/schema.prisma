@@ -11,7 +11,7 @@ model log {
   id_log  Int       @id @default(autoincrement())
   id_user Int?
   action  String?   @db.VarChar
-  date    DateTime? @db.Timestamp(6)
+  date    DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Timestamp(6)
   user    user?     @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -32,37 +32,51 @@ model msg {
 }
 
 model sanction {
-  id_sanction Int     @id @default(autoincrement())
-  id_user     Int?
-  raison      String? @db.VarChar(500)
-  user        user?   @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+  id_sanction       Int       @id @default(autoincrement())
+  id_user           Int?
+  raison            String?   @db.VarChar(500)
+  jour_sanction     DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  jour_fin_sanction DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  user              user?     @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model user {
-  id_user            Int                  @id @default(autoincrement())
-  nom                String?              @db.VarChar(30)
-  prenom             String?              @db.VarChar(30)
-  age                Int?
-  photo              String?              @db.VarChar
-  description        String?              @db.VarChar(1500)
-  ecole              String?              @db.VarChar(30)
-  niveau_scolaire    Int?
-  genre              String?              @db.VarChar
-  personne_lie       Int?
-  email              String               @unique @db.VarChar
-  clerk_id           String               @unique @db.VarChar
-  first_connection   Boolean?             @default(true)
-  log                log[]
-  match              match[]
-  msg                msg[]
-  sanction           sanction[]
-  user_match_critere user_match_critere[]
+  id_user             Int                  @id @default(autoincrement())
+  nom                 String?              @db.VarChar(30)
+  prenom              String?              @db.VarChar(30)
+  age                 Int?
+  photo               String?              @db.VarChar
+  description         String?              @db.VarChar(1500)
+  ecole               String?              @db.VarChar(30)
+  niveau_scolaire     String?              @db.VarChar(30)
+  genre               String?              @db.VarChar
+  personne_lie        Int?
+  email               String               @unique @db.VarChar
+  clerk_id            String               @unique @db.VarChar
+  first_connection    Boolean              @default(true)
+  date_inscription    DateTime?            @default(dbgenerated("CURRENT_DATE")) @db.Date
+  connection_autorise Boolean?             @default(true)
+  log                 log[]
+  match               match[]
+  msg                 msg[]
+  sanction            sanction[]
+  user_match_critere  user_match_critere[]
 }
 
 model user_match_critere {
-  id_match_critere Int     @id @default(autoincrement())
-  id_user          Int?
-  critere_de_match String? @db.VarChar
-  filtre_de_match  String? @db.VarChar
-  user             user?   @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+  id_match_critere                                    Int      @id @default(autoincrement())
+  id_user                                             Int?
+  id_critere                                          Int?
+  filtre_de_match                                     Int?
+  critere_user_match_critere_filtre_de_matchTocritere critere? @relation("user_match_critere_filtre_de_matchTocritere", fields: [filtre_de_match], references: [id_critere], onDelete: NoAction, onUpdate: NoAction)
+  critere_user_match_critere_id_critereTocritere      critere? @relation("user_match_critere_id_critereTocritere", fields: [id_critere], references: [id_critere], onDelete: NoAction, onUpdate: NoAction)
+  user                                                user?    @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model critere {
+  id_critere                                                     Int                  @id @default(autoincrement())
+  type                                                           String               @db.VarChar
+  name                                                           String               @db.VarChar
+  user_match_critere_user_match_critere_filtre_de_matchTocritere user_match_critere[] @relation("user_match_critere_filtre_de_matchTocritere")
+  user_match_critere_user_match_critere_id_critereTocritere      user_match_critere[] @relation("user_match_critere_id_critereTocritere")
 }

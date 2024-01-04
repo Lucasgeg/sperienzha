@@ -1,3 +1,62 @@
+/* Poppins font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,600;1,300;1,600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: "Poppins";
+}
+
+.box1 {
+  display: flex;
+  flex-grow: 1;
+  text-align: center;
+  padding: 2% 5%;
+}
+
+.box2 {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 1%;
+  text-align: center;
+  padding: 0% 2%;
+}
+
+.box3 {
+  display: flex;
+  flex: 1;
+  gap: 2%;
+  text-align: center;
+  padding: 0% 0% 2% 0%;
+}
+
+.one {
+  flex: 1 1 auto;
+  background-color: #ee7983;
+  border-radius: 25px;
+  padding: 3%;
+}
+
+.two {
+  flex: 1 1 auto;
+  background-color: #f7cb48;
+  border-radius: 25px;
+  padding: 3%;
+}
+
+.three {
+  flex: 1 1 auto;
+  background-color: #dbbbe7;
+  border-radius: 25px;
+  padding: 3%;
+}
+
+.four {
+  flex: 1 1 auto;
+  background-color: #a3cad4;
+  border-radius: 25px;
+  padding: 3%;
+}

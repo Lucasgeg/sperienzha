@@ -2,6 +2,7 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { UserJSON, WebhookEvent } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -51,15 +52,18 @@ export async function POST(req: Request) {
 
   const { id, email_addresses } = evt.data as UserJSON;
 
-  console.log(`Webhook with and ID of ${id} and type of `);
-  console.log(body);
-
-  const user = await prisma.user.create({
-    data: {
-      email: email_addresses[0].email_address,
-      clerk_id: id,
-    },
-  });
-
-  return new Response("", { status: 200 });
+  try {
+    await prisma.user.create({
+      data: {
+        email: email_addresses[0].email_address,
+        clerk_id: id,
+      },
+    });
+    return NextResponse.redirect("/welcome");
+  } catch (error) {
+    console.log(error);
+    return new Response("Error occured", {
+      status: 400,
+    });
+  }
 }
