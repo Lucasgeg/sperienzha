@@ -1,5 +1,8 @@
-import { SignOutButton } from "@clerk/nextjs";
+"use client";
+import { RedirectToSignIn, SignIn, useAuth } from "@clerk/nextjs";
 
 export default function Home() {
-  return <SignOutButton>Déconnexion</SignOutButton>;
+  const { userId } = useAuth();
+  if (!userId) return <RedirectToSignIn />;
+  return <div className="">Hello Spérienzha</div>;
 }

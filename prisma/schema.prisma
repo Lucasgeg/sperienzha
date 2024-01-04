@@ -51,7 +51,7 @@ model user {
   personne_lie       Int?
   email              String               @unique @db.VarChar
   clerk_id           String               @unique @db.VarChar
-  first_connection   Boolean?             @default(true)
+  first_connection   Boolean              @default(true)
   log                log[]
   match              match[]
   msg                msg[]
