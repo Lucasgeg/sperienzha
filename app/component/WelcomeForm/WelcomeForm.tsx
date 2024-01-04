@@ -145,151 +145,183 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
   }; */
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8 place-items-center">
-        <Input
-          title="Prénom"
-          id="firstname"
-          className="w-1/2 text-left"
-          value={welcomeForm.firstname}
-          onChange={(e) => handleChange(e)}
-        />
-        <Input
-          title="Nom"
-          id="lastname"
-          value={welcomeForm.lastname}
-          onChange={(e) => handleChange(e)}
-          className="w-1/2 text-left"
-        />
-        <Input
-          title="Email"
-          id="email"
-          value={email || welcomeForm.email}
-          disabled={Boolean(email)}
-          onChange={(e) => handleChange(e)}
-          className="text-left w-1/2"
-        />
-        <Input
-          title="Age"
-          id="age"
-          className="text-left w-1/2"
-          onChange={(e) => handleChange(e)}
-        />
-        <div className="w-1/2">
-          <label
-            htmlFor="gender"
-            className="block text-sm font-medium text-gray-900 text-left"
-          >
-            Sexe
-          </label>
-
-          <select
-            name="gender"
-            id="gender"
-            className="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
-            value={welcomeForm.gender}
-            onChange={(e) => handleSelectGenderChange(e)}
-          >
-            <option value="">Please select</option>
-            {Object.values(Gender).map((gender) => (
-              <option value={gender} key={gender}>
-                {gender}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="w-1/2">
-          <label
-            htmlFor="school"
-            className="block text-sm font-medium text-gray-900 text-left"
-          >
-            Ecole
-          </label>
-
-          <select
-            name="school"
-            id="school"
-            className="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
-            value={welcomeForm.school}
-            onChange={(e) => handleSelectSchoolChange(e)}
-          >
-            <option value="">Please select</option>
-            {Object.values(School).map((school) => (
-              <option value={school} key={school}>
-                {school}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="w-1/2">
-          <label
-            htmlFor="level"
-            className="block text-sm font-medium text-gray-900 text-left"
-          >
-            Niveau
-          </label>
-
-          <select
-            name="level"
-            id="level"
-            className="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 sm:text-sm"
-            value={welcomeForm.level}
-            onChange={(e) => handleSelectSchoolLvlChange(e)}
-          >
-            <option value="">Please select</option>
-            {Object.values(SchoolLevel).map((SchoolLevel) => (
-              <option value={SchoolLevel} key={SchoolLevel}>
-                {SchoolLevel}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="w-1/2">
-          <label htmlFor="description" className="sr-only">
-            Description
-          </label>
-
-          <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
-            <textarea
-              id="description"
-              className="w-full resize-none border-none align-top focus:ring-0 focus:outline-none sm:text-sm"
-              rows={4}
-              placeholder="Décris toi en quelques mots"
-              maxLength={1500}
-              onChange={(e) =>
-                setWelcomeForm({ ...welcomeForm, description: e.target.value })
-              }
-            ></textarea>
-
-            <div className="flex items-center justify-end gap-2 bg-white p-3">
-              <button
-                type="button"
-                className="rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-600"
-                onClick={() =>
-                  setWelcomeForm({ ...welcomeForm, description: "" })
-                }
-                value={welcomeForm.description}
+      <div className="bg-white min-h-screen flex items-center justify-center">
+        <div className="p-8 rounded max-w-md">
+          <h2 className="text-2xl font-bold mb-4">Bienvenue sur Spérienzha</h2>
+          <p>
+            Maintenant que tu es inscrit, merci de compléter ces quelques
+            informations afin que nous puissons t&apos;aider à trouver ton
+            tuteur
+          </p>
+          <form className="w-96 mx-auto">
+            <div className="mb-4">
+              <label
+                htmlFor="firstname"
+                className="block text-gray-700 text-sm font-bold mb-2"
               >
-                Clear
-              </button>
+                Prénom
+              </label>
+              <input
+                type="text"
+                id="firstname"
+                name="firstname"
+                className="w-full px-3 py-2 border rounded-md"
+                placeholder="Prénom"
+                value={welcomeForm.firstname}
+                onChange={(e) => handleChange(e)}
+              />
             </div>
-          </div>
-        </div>
 
-        <Input
-          title="Photo"
-          type="file"
-          accept="image/*"
-          id="picture"
-          className="text-left w-1/2"
-          onChange={(e) => handlePicture(e)}
-        />
+            <div className="mb-4">
+              <label
+                htmlFor="lastname"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Nom
+              </label>
+              <input
+                type="lastname"
+                id="lastname"
+                name="lastname"
+                className="w-full px-3 py-2 border rounded-md"
+                placeholder="Nom"
+                value={welcomeForm.lastname}
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="gender"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Genre
+              </label>
+              <select
+                id="gender"
+                name="gender"
+                className="w-full px-3 py-2 border rounded-md"
+                value={welcomeForm.gender}
+                onChange={(e) => handleSelectGenderChange(e)}
+              >
+                <option value="">Veuillez choisir</option>
+                {Object.values(Gender).map((gender) => (
+                  <option value={gender} key={gender}>
+                    {gender}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="age"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Age
+              </label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                className="w-full px-3 py-2 border rounded-md"
+                placeholder="Enter your age"
+                value={welcomeForm.age}
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="school"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Ecole
+              </label>
+              <select
+                id="school"
+                name="school"
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="">Veuillez choisir</option>
+                {Object.values(School).map((School) => (
+                  <option value={School} key={School}>
+                    {School}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="level"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Niveau
+              </label>
+              <select
+                id="level"
+                name="level"
+                className="w-full px-3 py-2 border rounded-md"
+              >
+                <option value="">Veuillez choisir</option>
+                {Object.values(SchoolLevel).map((SchoolLevel) => (
+                  <option value={SchoolLevel} key={SchoolLevel}>
+                    {SchoolLevel}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="description"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                rows={4}
+                value={welcomeForm.description}
+                onChange={(e) =>
+                  setWelcomeForm({
+                    ...welcomeForm,
+                    description: e.target.value,
+                  })
+                }
+                className="w-full px-3 py-2 border rounded-md"
+                placeholder="Décris toi en quelques mots."
+              ></textarea>
+            </div>
+
+            <div className="mb-4">
+              <label
+                htmlFor="profilePicture"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                Photo
+              </label>
+              <input
+                type="file"
+                id="picture"
+                name="picture"
+                accept="image/*"
+                className="w-full px-3 py-2 border rounded-md"
+                onChange={(e) => handlePicture(e)}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="bg-blue-primary text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              Valider
+            </button>
+          </form>
+        </div>
       </div>
-      <button
-        type="submit"
-        className="inline-block rounded border border-blue-primary bg-blue-primary px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-blue-primary focus:outline-none focus:ring active:text-blue-primary"
-      >
-        Valider
-      </button>
     </form>
   );
 };

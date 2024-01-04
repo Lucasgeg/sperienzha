@@ -12,11 +12,6 @@ export default async function Welcome() {
 
   return (
     <div className="text-center mt-1 px-5">
-      <h1 className="text-4xl">Bienvenue sur Spérienzha</h1>
-      <p>
-        Maintenant que tu es inscrit, merci de compléter ces quelques
-        informations afin que nous puissons t&apos;aider à trouver ton tuteur
-      </p>
       {user?.email && <WelcomeForm email={user.email} />}
     </div>
   );
