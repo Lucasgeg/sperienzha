@@ -15,8 +15,18 @@ export async function POST(req: Request) {
     level,
     picture,
     school,
+    criteria,
   } = data;
-
+  const userId = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+    select: {
+      id_user: true,
+    },
+  });
+  if (!userId)
+    return NextResponse.json({ error: "user not found" }, { status: 404 });
   try {
     const data = await prisma.user.update({
       where: {
@@ -36,7 +46,14 @@ export async function POST(req: Request) {
       },
     });
 
-    if (data) {
+    const dataCriteria = await prisma.userCritere.createMany({
+      data: criteria.map((c) => ({
+        critereId: c,
+        userId: userId.id_user,
+      })),
+    });
+
+    if (data && dataCriteria) {
       return NextResponse.json({ test: "bravo" }, { status: 200 });
     }
   } catch (error) {

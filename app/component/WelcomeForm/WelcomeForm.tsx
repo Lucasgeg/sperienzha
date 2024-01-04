@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { critere } from "@prisma/client";
+import prisma from "@/lib/prisma";
 
 type UserWelcomeProps = {
   email: string;
@@ -36,13 +38,27 @@ export interface WelcomeForm {
   level?: SchoolLevel;
   description?: string;
   picture?: string;
+  criteria: number[];
 }
 
 export const WelcomeForm = ({ email }: UserWelcomeProps) => {
   const router = useRouter();
   const [welcomeForm, setWelcomeForm] = useState<WelcomeForm>({
     email: email,
+    criteria: [],
   });
+
+  const [critere, setCritere] = useState<critere[]>([]);
+  useEffect(() => {
+    const getCritere = async () => {
+      const res = await fetch("/api/firstConection/get-criteria");
+      const data = await res.json();
+      if (res.status === 200) setCritere(data.data);
+    };
+    getCritere();
+  }, []);
+  console.log(welcomeForm.criteria);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWelcomeForm({ ...welcomeForm, [e.target.id]: e.target.value });
   };
@@ -75,6 +91,7 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
       school: e.target.value as School,
     });
   };
+
   const handleSelectSchoolLvlChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -101,16 +118,13 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
       return;
     }
 
-    const res = await fetch(
-      "http://localhost:3000/api/firstConection/updatewelcome",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(welcomeForm),
-      }
-    );
+    const res = await fetch("/api/firstConection/updatewelcome", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(welcomeForm),
+    });
 
     if (res.status === 200) {
       router.push("/");
@@ -120,7 +134,7 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
   return (
     <form onSubmit={(e) => handleSubmit(e)}>
       <div className="bg-white min-h-screen flex items-center justify-center">
-        <div className="p-8 rounded max-w-md">
+        <div className="p-8 rounded max-w-lg">
           <h2 className="text-2xl font-bold mb-4">Bienvenue sur Spérienzha</h2>
           <p>
             Maintenant que tu es inscrit, merci de compléter ces quelques
@@ -288,6 +302,41 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
               className="w-full px-3 py-2 border rounded-md"
               onChange={(e) => handlePicture(e)}
             />
+          </div>
+          <div className="">
+            <span>Coche les critères qui te corresponde</span>
+            <div className="flex flex-wrap">
+              {critere.length &&
+                critere.map((c) => (
+                  <div className="w-1/2" key={c.id_critere}>
+                    <label htmlFor={c.name} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={c.name}
+                        name={c.name}
+                        value={c.name}
+                        className="mr-2"
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setWelcomeForm({
+                              ...welcomeForm,
+                              criteria: [...welcomeForm.criteria, c.id_critere],
+                            });
+                          } else {
+                            setWelcomeForm({
+                              ...welcomeForm,
+                              criteria: welcomeForm.criteria.filter(
+                                (crit) => crit !== c.id_critere
+                              ),
+                            });
+                          }
+                        }}
+                      />
+                      {c.name}
+                    </label>
+                  </div>
+                ))}
+            </div>
           </div>
 
           <button

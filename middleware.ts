@@ -14,6 +14,7 @@ export default authMiddleware({
     if (!auth.userId && !auth.isPublicRoute) {
       return NextResponse.next();
     }
+
     const res = await fetch("http://localhost:3000/api/firstConection", {
       method: "POST",
       headers: {
@@ -27,8 +28,9 @@ export default authMiddleware({
       return NextResponse.next();
     }
     if (result.first_connection === true) {
-      if (url.pathname === "/api/firstConection/updatewelcome")
+      if (url.pathname.startsWith("/api/firstConection")) {
         return NextResponse.next();
+      }
       url.pathname = "/welcome";
       return NextResponse.rewrite(url);
     }
