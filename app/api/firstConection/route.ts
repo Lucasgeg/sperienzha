@@ -8,7 +8,6 @@ type PostRequest = {
 export async function POST(req: Request) {
   const data: PostRequest = await req.json();
   const { id } = data;
-  console.log(id);
   try {
     const data = await prisma.user.findUnique({
       where: {
