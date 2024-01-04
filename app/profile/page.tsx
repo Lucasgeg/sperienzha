@@ -1,3 +1,3 @@
-export const Profile = () => {
+export default function page() {
   return <div>page</div>;
-};
+}
