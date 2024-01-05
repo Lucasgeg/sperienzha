@@ -304,7 +304,7 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
             />
           </div>
           <div className="">
-            <span>Coche les critères qui te corresponde</span>
+            <span>Coche les critères qui te correspondent</span><br /><br />
             <div className="flex flex-wrap">
               {critere.length &&
                 critere.map((c) => (
