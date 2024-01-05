@@ -45,7 +45,6 @@ export async function POST(req: Request) {
         first_connection: false,
       },
     });
-
     const dataCriteria = await prisma.userCritere.createMany({
       data: criteria.map((c) => ({
         critereId: c,

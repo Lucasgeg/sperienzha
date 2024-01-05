@@ -127,7 +127,8 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
     });
 
     if (res.status === 200) {
-      return NextResponse.json({ status: "success" }, { status: 200 });
+      NextResponse.json({ status: "success" }, { status: 200 });
+      return router.refresh();
     } else console.log(res.status);
   };
 
