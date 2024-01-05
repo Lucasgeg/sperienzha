@@ -15,13 +15,16 @@ export default authMiddleware({
       return NextResponse.next();
     }
 
-    const res = await fetch("/api/firstConection", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: userId }),
-    });
+    const res = await fetch(
+      "https://sperienzha.vercel.app/api/firstConection",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: userId }),
+      }
+    );
 
     const result = await res.json();
     if (result.first_connection === false) {
