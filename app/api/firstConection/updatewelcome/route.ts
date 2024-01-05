@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     });
 
     if (data && dataCriteria) {
-      return NextResponse.json({ test: "bravo" }, { status: 200 });
+      return NextResponse.redirect("/");
     }
   } catch (error) {
     console.log(error);

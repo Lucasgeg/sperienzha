@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { critere } from "@prisma/client";
 import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
 type UserWelcomeProps = {
   email: string;
@@ -126,8 +127,8 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
     });
 
     if (res.status === 200) {
-      router.push("/");
-    }
+      return NextResponse.json({ status: "success" }, { status: 200 });
+    } else console.log(res.status);
   };
 
   return (
