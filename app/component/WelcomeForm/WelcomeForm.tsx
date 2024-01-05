@@ -57,7 +57,6 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
     };
     getCritere();
   }, []);
-  console.log(welcomeForm.criteria);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWelcomeForm({ ...welcomeForm, [e.target.id]: e.target.value });
@@ -304,7 +303,9 @@ export const WelcomeForm = ({ email }: UserWelcomeProps) => {
             />
           </div>
           <div className="">
-            <span>Coche les critères qui te correspondent</span><br /><br />
+            <span>Coche les critères qui te correspondent</span>
+            <br />
+            <br />
             <div className="flex flex-wrap">
               {critere.length &&
                 critere.map((c) => (
