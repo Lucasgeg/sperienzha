@@ -15,7 +15,7 @@ export default authMiddleware({
       return NextResponse.next();
     }
 
-    const res = await fetch("http://localhost:3000/api/firstConection", {
+    const res = await fetch("/api/firstConection", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
